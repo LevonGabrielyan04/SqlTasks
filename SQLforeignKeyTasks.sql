@@ -13,3 +13,16 @@ alter table Levon.dbo.Subscribers --Task 4
 	add PlanId int not null
 alter table Levon.dbo.Subscribers
 	add foreign key(PlanId) references ServicePlans(PlanId)
+
+alter table Levon.dbo.SMSMessages --Task 5
+	add SubscriberId int not null
+alter table Levon.dbo.SMSMessages
+	add foreign key(SubscriberId) references Subscribers(SubscriberId)
+
+alter table Levon.dbo.RoamingData --Task 6
+	add foreign key(SubscriberId) references Subscribers(SubscriberId)
+
+alter table Levon.dbo.CallDetails --Task 7
+	add SubscriberId int not null
+alter table Levon.dbo.CallDetails
+	add foreign key(SubscriberId) references Subscribers(SubscriberId)
