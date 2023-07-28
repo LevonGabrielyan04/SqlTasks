@@ -103,3 +103,7 @@ join Levon.dbo.Subscribers on Address IN (select AffectedAreas from Levon.dbo.Ne
 join Levon.dbo.Billing on Billing.CustomerId = Subscribers.CustomerId
 join Levon.dbo.NetworkCoverage on NetworkCoverage.CovergeId = NetworkOutages.CoverageId
 
+select SubscriberId, PaymentStatus --Task 19
+from Levon.dbo.CallDetails
+join Levon.dbo.Billing on Subscribers.CustomerId = Billing.CustomerId
+where StartTime > (select RoamingStartDate from RoamingData) and StartTime < (select RoamingEndDate from RoamingData)
