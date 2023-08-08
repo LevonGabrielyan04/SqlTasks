@@ -63,27 +63,46 @@
 --	where Id = (select Id from inserted)
 --END
 
-use Levon--Task 12
-go
-create trigger BeforeDeleteSubscriberTrigger 
-on Levon.dbo.Subscribers
-after delete as
-begin
-	declare @Cursor cursor
-	declare @Field int
-	set @Cursor = cursor for 
-	select CustomerId from deleted
-	open @Cursor
-	fetch Next from @Cursor
-	into @Field
-	while @@FETCH_STATUS = 0
-	begin
-		IF EXISTS (SELECT * from Levon.dbo.Billing where CustomerId = @Field and DATEDIFF(day,getdate(),PaymentDueDate) > 0)
-		BEGIN
-			insert into Levon.dbo.Subscribers(Name,Address,DateOfBirth,Gender,Status,PlanId,PhoneNumber,CustomerId,Balance)
-			select Name,Address,DateOfBirth,Gender,Status,PlanId,PhoneNumber,CustomerId,Balance from deleted
-		END
-		fetch Next from @Cursor
-		into @Field
-	end
-end
+
+--use Levon--Task 12
+--go
+--create trigger BeforeDeleteSubscriberTrigger 
+--on Levon.dbo.Subscribers
+--instead of delete as
+--begin
+--	declare @Cursor cursor
+--	declare @Field int
+--	set @Cursor = cursor for 
+--	SELECT CustomerId
+--	FROM deleted
+--	WHERE CustomerId NOT IN
+--	(select CustomerId from Levon.dbo.Billing
+--	where Billing.PaymentStatus = 'Not paid')
+--	open @Cursor
+--	fetch Next from @Cursor
+--	into @Field
+--	while @@FETCH_STATUS = 0
+--	begin
+--		delete from Levon.dbo.Subscribers
+--		where CustomerId = @Field
+--		fetch Next from @Cursor
+--		into @Field
+--	end
+--end
+
+--use Levon--Task 12
+--go
+--create trigger BeforeDeleteSubscriberTrigger 
+--on Levon.dbo.Subscribers
+--instead of delete as
+--begin
+--	delete from Levon.dbo.Subscribers
+--	where CustomerId in (SELECT CustomerId
+--	FROM deleted
+--	WHERE CustomerId NOT IN
+--	(select CustomerId from Levon.dbo.Billing
+--	where Billing.PaymentStatus = 'Not paid'))
+--end
+
+
+
